@@ -138,20 +138,4 @@ function attachGridItemListeners() {
 document.addEventListener('DOMContentLoaded', () => {
     // Attach event listeners to grid items
     attachGridItemListeners();
-
-    // Handle share button if it exists
-    const shareButton = document.querySelector('#shareButton');
-    if (shareButton) {
-        shareButton.addEventListener('click', () => {
-            const shareableLink = choiceManager.generateShareableLink();
-            // Copy to clipboard
-            navigator.clipboard.writeText(shareableLink)
-                .then(() => {
-                    alert('Link copied to clipboard!');
-                })
-                .catch(() => {
-                    alert('Failed to copy link. Please try again.');
-                });
-        });
-    }
 }); 
