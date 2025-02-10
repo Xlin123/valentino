@@ -141,14 +141,16 @@
                 const feedback = document.querySelector('.copy-feedback');
                 const loadingOverlay = document.querySelector('.loading-overlay');
 
+                button.disabled = true;
+                loadingOverlay.classList.add('visible');
+
                 if (!confirm('Would you like to download your Valentine\'s date plan as an image?')) {
+                    loadingOverlay.classList.remove('visible');
+                    button.disabled = false;
                     return;
                 }
 
                 try {
-                    button.disabled = true;
-                    loadingOverlay.classList.add('visible');
-
                     // Generate image from choices
                     const element = document.getElementById('capture');
                     const canvas = await html2canvas(element, {
