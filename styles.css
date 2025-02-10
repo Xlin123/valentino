@@ -341,14 +341,19 @@ body {
     color: var(--md-on-secondary-container);
     padding: 1rem 2rem;
     border-radius: 2rem;
-    box-shadow: 0 2px 4px var(--md-shadow);
+    box-shadow: 0 4px 8px var(--md-shadow);
     opacity: 0;
     transition: opacity 0.3s ease;
     pointer-events: none;
+    z-index: 1001;
+    font-weight: 500;
+    font-size: 1.1rem;
+    text-align: center;
 }
 
 .copy-feedback.visible {
     opacity: 1;
+    pointer-events: auto;
 }
 
 /* Topic page styles */
