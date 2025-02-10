@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan Your Perfect Valentine's Date</title>
+
+    <!-- Dynamic meta tags for social sharing -->
+    <meta property="og:title" content="Plan Your Perfect Valentine's Date 💝">
+    <meta property="og:description"
+        content="Create and share your perfect Valentine's date plan! Choose your ideal time, attire, cuisine, and dessert.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+
+    <link rel="stylesheet" href="styles.css?v=2">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="js/animations.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <a href="index.html" class="home-button" title="Home">
+            <svg class="home-icon" width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+        </a>
+        <main>
+            <h1 class="title">Plan Your Perfect Valentine's Date ❤️</h1>
+            <p class="subtitle text-center">Create and share your perfect date plan! 💝</p>
+            <div id="capture" class="choices-container">
+                <div id="choicesList">
+                    <!-- Choices will be populated by JavaScript -->
+                </div>
+                <div class="notes-container">
+                    <label for="notes" class="notes-label">Add your personal touch ✨</label>
+                    <textarea id="notes" class="notes-input"
+                        placeholder="Add any special notes or messages for your date..."></textarea>
+                </div>
+            </div>
+            <div class="button-container">
+                <button id="resetButton" class="cta-button reset-button">Start Over</button>
+                <button id="shareButton" class="cta-button share-button">Download Image</button>
+            </div>
+        </main>
+    </div>
+    <div class="copy-feedback">
+        <p>Image downloaded!</p>
+    </div>
+    <div class="loading-overlay">
+        <div class="loading-hearts">
+            <div class="loading-heart">❤️</div>
+            <div class="loading-heart">❤️</div>
+            <div class="loading-heart">❤️</div>
+        </div>
+        <div class="loading-text">Creating your perfect date plan...</div>
+    </div>
+    <script src="js/constants.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const choicesList = document.getElementById('choicesList');
+            const choices = choiceManager.getAllChoices();
+            const buttonContainer = document.querySelector('.button-container');
+            const notesInput = document.getElementById('notes');
+
+            // Load saved notes
+            notesInput.value = choiceManager.getNotes();
+
+            // Save notes when changed
+            notesInput.addEventListener('input', () => {
+                choiceManager.saveNotes(notesInput.value);
+            });
+
+            console.log('Loaded choices:', choices);
+
+            // Check if there are any choices
+            if (Object.keys(choices).length === 0) {
+                console.log('No choices found');
+                choicesList.innerHTML = `
+                    <div class="no-choices">
+                        <svg class="empty-state-icon" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <h2>Start Planning Your Perfect Date!</h2>
+                        <p>Create your personalized Valentine's date plan by selecting your preferences for time, attire, cuisine, and dessert.</p>
+                        <a href="topics/time.html" class="cta-button">Begin Your Journey ✨</a>
+                    </div>
+                `;
+                buttonContainer.style.display = 'none';
+                document.querySelector('.notes-container').style.display = 'none';
+                return;
+            }
+
+            // Generate choice cards
+            const categoryOrder = ['time', 'attire', 'cuisine', 'dessert'];
+            const sortedChoices = categoryOrder
+                .filter(category => choices[category])
+                .map(category => [category, choices[category]]);
+
+            console.log('Sorted choices:', sortedChoices);
+
+            // Simplified image loading
+            choicesList.innerHTML = sortedChoices
+                .map(([topic, choice]) => {
+                    console.log('Generating card for:', topic, choice);
+
+                    if (topic === 'time') {
+                        const timeInfo = TIME_DISPLAYS[choice];
+                        console.log('Time info:', timeInfo);
+                        return `
+                            <div class="choice-card">
+                                <div class="time-display-share">
+                                    <div class="time">${timeInfo.time}</div>
+                                    <div class="subtext">${timeInfo.subtext}</div>
+                                </div>
+                                <div class="choice-info">
+                                    <h3>${CATEGORIES[topic]}</h3>
+                                    <p>${timeInfo.subtext}</p>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        return `
+                            <div class="choice-card">
+                                <img src="${IMAGES[choice]}" alt="${DESCRIPTIONS[topic][choice]}" crossorigin="anonymous">
+                                <div class="choice-info">
+                                    <h3>${CATEGORIES[topic]}</h3>
+                                    <p>${DESCRIPTIONS[topic][choice]}</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                })
+                .join('');
+
+            console.log('Generated HTML:', choicesList.innerHTML);
+
+            // Handle share button
+            document.getElementById('shareButton').addEventListener('click', async () => {
+                const button = document.getElementById('shareButton');
+                const feedback = document.querySelector('.copy-feedback');
+                const loadingOverlay = document.querySelector('.loading-overlay');
+                const originalText = button.textContent;
+
+                try {
+                    button.disabled = true;
+                    loadingOverlay.classList.add('visible');
+
+                    // Generate image from choices
+                    const element = document.getElementById('capture');
+                    console.log('Capturing element:', element);
+
+                    const canvas = await html2canvas(element, {
+                        useCORS: true,
+                        allowTaint: true,
+                        backgroundColor: '#ffffff',
+                        scale: window.devicePixelRatio * 2,
+                        logging: true,
+                        imageTimeout: 15000,
+                        onclone: function (clonedDoc) {
+                            Array.from(clonedDoc.images).forEach(img => {
+                                img.crossOrigin = 'anonymous';
+                            });
+                        }
+                    });
+
+                    // Convert canvas to blob
+                    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                    console.log('Generated blob:', blob);
+
+                    // Create a File object from the blob
+                    const file = new File([blob], 'valentines-date-plan.png', { type: 'image/png' });
+
+                    if (navigator.share && navigator.canShare({ files: [file] })) {
+                        // Use Web Share API if available
+                        await navigator.share({
+                            files: [file],
+                            title: 'My Perfect Valentines Date Plan',
+                            text: 'Check out my perfect Valentines date plan!'
+                        });
+
+                        feedback.querySelector('p').textContent = 'Opening share dialog...';
+                    } else {
+                        // Fallback to downloading the file
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = 'valentines-date-plan.png';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+
+                        feedback.querySelector('p').textContent = 'Image downloaded!';
+                    }
+
+                    // Show heart animation on successful download/share
+                    showHeartAnimation();
+
+                    feedback.classList.add('visible');
+                    setTimeout(() => {
+                        feedback.classList.remove('visible');
+                    }, 2000);
+                } catch (error) {
+                    console.error('Error sharing image:', error);
+                    alert('Failed to share image. Please try saving it instead.');
+                } finally {
+                    loadingOverlay.classList.remove('visible');
+                    button.disabled = false;
+                }
+            });
+
+            // Handle reset button
+            document.getElementById('resetButton').addEventListener('click', () => {
+                if (confirm('Are you sure you want to start over? This will clear all your current choices.')) {
+                    choiceManager.clearChoices();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

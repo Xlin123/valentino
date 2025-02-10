@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Time</title>
+    <link rel="stylesheet" href="../styles.css?v=2">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script src="../js/animations.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <a href="../index.html" class="home-button" title="Home">
+            <svg class="home-icon" width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+        </a>
+        <main data-topic="time">
+            <h1 class="title">Choose Your Time</h1>
+            <div class="grid-container">
+                <div class="grid-item" data-choice="all-day" data-next="attire.html">
+                    <div class="time-display">
+                        <div class="time">24/7</div>
+                        <div class="subtext">All Day</div>
+                    </div>
+                </div>
+                <div class="grid-item" data-choice="noon-to-evening" data-next="attire.html">
+                    <div class="time-display">
+                        <div class="time">12-21</div>
+                        <div class="subtext">Noon to Evening</div>
+                    </div>
+                </div>
+                <div class="grid-item" data-choice="lunch" data-next="attire.html">
+                    <div class="time-display">
+                        <div class="time">11:30-14</div>
+                        <div class="subtext">Lunch Time</div>
+                    </div>
+                </div>
+                <div class="grid-item" data-choice="evening-only" data-next="attire.html">
+                    <div class="time-display">
+                        <div class="time">17-23</div>
+                        <div class="subtext">Evening Only</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../js/constants.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+
+</html>

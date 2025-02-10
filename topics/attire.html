@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Attire</title>
+    <link rel="stylesheet" href="../styles.css?v=2">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script src="../js/animations.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <a href="../index.html" class="home-button" title="Home">
+            <svg class="home-icon" width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+        </a>
+        <main data-topic="attire">
+            <h1 class="title">Choose Your Attire</h1>
+            <div class="grid-container">
+                <!-- Grid items will be populated dynamically -->
+            </div>
+        </main>
+    </div>
+    <script src="../js/constants.js"></script>
+    <script src="../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gridContainer = document.querySelector('.grid-container');
+
+            // Debug output
+            console.log('DESCRIPTIONS:', DESCRIPTIONS);
+            console.log('DESCRIPTIONS.attire:', DESCRIPTIONS['attire']);
+
+            gridContainer.innerHTML = Object.entries(DESCRIPTIONS['attire'])
+                .map(([choice, description]) => `
+                    <div class="grid-item" data-choice="${choice}" data-next="cuisine.html">
+                        <img src="${IMAGES[choice]}" alt="${description}">
+                        <h3>${choice === 'smart-casual' ? 'Business Casual' : choice.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</h3>
+                        <p class="description">${description}</p>
+                    </div>
+                `).join('');
+
+            // Attach event listeners after loading content
+            attachGridItemListeners();
+        });
+    </script>
+</body>
+
+</html>
