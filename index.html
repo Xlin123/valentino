@@ -24,6 +24,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <script src="js/animations.js"></script>
 </head>
 
@@ -170,32 +171,17 @@
                         }
                     });
 
-                    // For Safari compatibility, use data URL approach
-                    const dataUrl = canvas.toDataURL('image/png');
-                    const link = document.createElement('a');
-
-                    // Check if running on Safari
-                    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-                    if (isSafari) {
-                        // Safari approach: Open in new tab
-                        window.open(dataUrl);
-                        feedback.querySelector('p').textContent = 'Right click the image and choose "Save As" to download ✨';
-                    } else {
-                        // Other browsers: Direct download
-                        link.href = dataUrl;
-                        link.download = 'valentines-date-plan.png';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
+                    // Convert canvas to blob and save using FileSaver
+                    canvas.toBlob(function (blob) {
+                        saveAs(blob, 'valentines-date-plan.png');
                         feedback.querySelector('p').textContent = 'Your date plan has been downloaded! ✨';
-                    }
+                        showHeartAnimation();
+                        feedback.classList.add('visible');
+                        setTimeout(() => {
+                            feedback.classList.remove('visible');
+                        }, 3000);
+                    });
 
-                    showHeartAnimation();
-                    feedback.classList.add('visible');
-                    setTimeout(() => {
-                        feedback.classList.remove('visible');
-                    }, 5000);
                 } catch (error) {
                     alert('Failed to generate image. Please try again.');
                 } finally {
