@@ -170,29 +170,32 @@
                         }
                     });
 
-                    // Convert canvas to blob
-                    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-
-                    // Create a File object from the blob
-                    const file = new File([blob], 'valentines-date-plan.png', { type: 'image/png' });
-
-                    // Download the file
-                    const url = URL.createObjectURL(blob);
+                    // For Safari compatibility, use data URL approach
+                    const dataUrl = canvas.toDataURL('image/png');
                     const link = document.createElement('a');
-                    link.href = url;
-                    link.download = 'valentines-date-plan.png';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(url);
 
-                    feedback.querySelector('p').textContent = 'Your date plan has been downloaded! ✨';
+                    // Check if running on Safari
+                    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+                    if (isSafari) {
+                        // Safari approach: Open in new tab
+                        window.open(dataUrl);
+                        feedback.querySelector('p').textContent = 'Right click the image and choose "Save As" to download ✨';
+                    } else {
+                        // Other browsers: Direct download
+                        link.href = dataUrl;
+                        link.download = 'valentines-date-plan.png';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        feedback.querySelector('p').textContent = 'Your date plan has been downloaded! ✨';
+                    }
+
                     showHeartAnimation();
-
                     feedback.classList.add('visible');
                     setTimeout(() => {
                         feedback.classList.remove('visible');
-                    }, 3000);
+                    }, 5000);
                 } catch (error) {
                     alert('Failed to generate image. Please try again.');
                 } finally {
